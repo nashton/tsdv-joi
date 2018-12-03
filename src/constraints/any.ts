@@ -1,4 +1,4 @@
-import {Reference, Schema, ValidationOptions, WhenOptions} from "joi";
+import {Reference, Schema, ValidationOptions, WhenOptions, AnySchema} from "joi";
 import {constraintDecorator, typeConstraintDecorator} from "../core";
 
 export function Allow(...values : any[]) : PropertyDecorator {
@@ -17,7 +17,7 @@ export function AnySchema() : PropertyDecorator {
  * Returns a new type that is the result of adding the rules of one type to another.
  */
 export function Concat(schema : Schema) : PropertyDecorator {
-    return constraintDecorator([], (schema : Schema) => {
+    return constraintDecorator([], (schema : AnySchema) => {
         return schema.concat(schema);
     });
 }
@@ -192,8 +192,8 @@ export const Equal = Valid;
 /**
  * Converts the type into an alternatives type where the conditions are merged into the type definition.
  */
-export function When<T>(ref : string | Reference, options : WhenOptions<T>) : PropertyDecorator {
+export function When<T>(ref : string | Reference, options : WhenOptions) : PropertyDecorator {
     return constraintDecorator([], (schema : Schema) => {
-        return schema.when<T>(<any>ref, options);
+        return schema.when(<any>ref, options);
     });
 }
